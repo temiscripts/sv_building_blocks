@@ -53,4 +53,12 @@ always_comb begin
     endcase
 end
 
+assign zero = ~(|result);
+assign negative = result[31];
+assign carry = (alu_op == ADD) ? add_result[32] : 
+               (alu_op == SUB) ? sub_result[32] : 
+               1'b0;
+assign overflow = (alu_op == ADD) ? (a[31] == b[31] && result[31] != a[31]) :
+                  (alu_op == SUB) ? (a[31] == ~b[31] && result[31] != a[31]) : 
+                  1'b0;
 endmodule
