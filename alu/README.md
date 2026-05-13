@@ -53,5 +53,19 @@ A 32-bit Arithmetic Logic Unit (ALU) implemented in SystemVerilog. The ALU is th
 ## Verification
 The self-checking testbench covers all 8 operations with meaningful input values. Special cases tested include unsigned carry overflow (0xFFFFFFFF + 1), signed overflow (0x7FFFFFFF + 1), subtraction producing a negative result, and subtraction producing zero to verify the zero flag. All results verified against expected values and confirmed correct.
 
-## Simulation Output
-![ALU Waveform](images/waveform.png)
+## Expected Results
+
+| Operation | a | b | result | Z | N | C | V |
+|---|---|---|---|---|---|---|---|
+| ADD | 0x00000005 | 0x0000000A | 0x0000000F | 0 | 0 | 0 | 0 |
+| ADD overflow | 0x7FFFFFFF | 0x00000001 | 0x80000000 | 0 | 1 | 0 | 1 |
+| ADD carry | 0xFFFFFFFF | 0x00000001 | 0x00000000 | 1 | 0 | 1 | 0 |
+| SUB | 0x0000000A | 0x00000005 | 0x00000005 | 0 | 0 | 1 | 0 |
+| SUB negative | 0x00000005 | 0x0000000A | 0xFFFFFFFB | 0 | 1 | 0 | 0 |
+| AND | 0xFF00FF00 | 0x0F0F0F0F | 0x0F000F00 | 0 | 0 | 0 | 0 |
+| OR | 0xFF00FF00 | 0x0F0F0F0F | 0xFF0FFF0F | 0 | 1 | 0 | 0 |
+| XOR | 0xFF00FF00 | 0x0F0F0F0F | 0xF00FF00F | 0 | 1 | 0 | 0 |
+| NAND | 0xFF00FF00 | 0x0F0F0F0F | 0xF0FFF0FF | 0 | 1 | 0 | 0 |
+| NOR | 0xFF00FF00 | 0x0F0F0F0F | 0x00F000F0 | 0 | 0 | 0 | 0 |
+| NOT | 0xFF00FF00 | N/A | 0x00FF00FF | 0 | 0 | 0 | 0 |
+| SUB zero | 0x00000005 | 0x00000005 | 0x00000000 | 1 | 0 | 1 | 0 |
