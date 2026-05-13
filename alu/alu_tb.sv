@@ -3,12 +3,13 @@ module alu_tb();
 
 logic [31:0] a;
 logic [31:0] b;
-alu_op_t alu_op;
+alu_op_t     alu_op;
 logic        zero;
 logic        negative;
 logic        carry;
 logic        overflow;
 logic [31:0] result;
+logic [31:0] result_hi;
 
 alu alu1(
     .a(a),
@@ -18,13 +19,14 @@ alu alu1(
     .negative(negative),
     .carry(carry),
     .overflow(overflow),
-    .result(result)
+    .result(result),
+    .result_hi(result_hi)
 );
 
 initial begin
 
-    $monitor("Time=%0t | op=%b | a=%h b=%h | result=%h | Z=%b N=%b C=%b V=%b",
-             $time, alu_op, a, b, result, zero, negative, carry, overflow);
+    $monitor("Time=%0t | op=%b | a=%h b=%h | result=%h result_hi=%h | Z=%b N=%b C=%b V=%b",
+             $time, alu_op, a, b, result, result_hi, zero, negative, carry, overflow);
 
     // ADD: 5 + 10 = 15
     a = 32'h00000005; b = 32'h0000000A; alu_op = ADD; #5;
@@ -61,6 +63,15 @@ initial begin
 
     // Zero flag: 5 - 5 = 0
     a = 32'h00000005; b = 32'h00000005; alu_op = SUB; #5;
+
+    // MUL: small numbers, result fits in 32 bits
+    a = 32'h00000005; b = 32'h00000003; alu_op = MUL; #5;
+
+    // MUL: large numbers, result needs result_hi
+    a = 32'hFFFFFFFF; b = 32'hFFFFFFFF; alu_op = MUL; #5;
+
+    // MUL: powers of two
+    a = 32'h00010000; b = 32'h00010000; alu_op = MUL; #5;
 
     $finish;
 end
