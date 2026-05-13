@@ -10,7 +10,7 @@ module seven_segment_tb();
 
     initial begin
         $monitor("Time=%0t | digit=%h | segments=%b | display=%c",
-                 $time, digit, segments, 
+                 $time, digit, segments,
                  (digit < 10) ? (8'(digit) + 8'h30) : (8'(digit) + 8'h37));
 
         digit = 4'h0; #5;
