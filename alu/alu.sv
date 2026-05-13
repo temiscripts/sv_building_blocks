@@ -8,7 +8,8 @@ output logic zero,
 output logic negative,
 output logic carry,
 output logic overflow,
-output logic [31:0] result
+output logic [31:0] result,
+output logic [31:0] result_hi
 );
 
 logic [32:0] add_result;
@@ -19,6 +20,7 @@ logic [31:0] xor_result;
 logic [31:0] nand_result;
 logic [31:0] nor_result;
 logic [31:0] not_result;
+logic [63:0] mul_result;
 
 assign and_result = a & b;
 assign or_result = a | b;
@@ -29,11 +31,13 @@ assign not_result = ~a;
 
 assign add_result = {1'b0, a} + {1'b0, b};
 assign sub_result = {1'b0, a} + {1'b0, ~b} + 1;
+assign mul_result = a * b;
 
 always_comb begin
     case (alu_op)
         ADD :     result = add_result[31:0];
         SUB :     result = sub_result[31:0];
+        MUL :     result = mul_result[31:0];
         AND_OP  :  result = and_result;
         OR_OP   :   result = or_result;
         NAND_OP : result = nand_result;
@@ -44,6 +48,7 @@ always_comb begin
     endcase
 end
 
+assign result_hi = (alu_op == MUL) ? mul_result[63:32] : 32'b0;
 assign zero = ~(|result);
 assign negative = result[31];
 assign carry = (alu_op == ADD) ? add_result[32] : 
