@@ -7,6 +7,7 @@ package alu_pkg;
         XOR_OP  = 4'b0100,
         NAND_OP = 4'b0101,
         NOR_OP  = 4'b0110,
-        NOT_OP  = 4'b0111
+        NOT_OP  = 4'b0111,
+        MUL     = 4'b1000
     } alu_op_t;
 endpackage
